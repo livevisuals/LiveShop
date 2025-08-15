@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>LIVE SHOP - Tienda</title>
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  body, html {
+    width: 100%;
+    height: 100%;
+    font-family: Arial, sans-serif;
+    background: url('https://i.postimg.cc/L5vQTW6B/KOS-LIVE-5.png') no-repeat center center fixed;
+    background-size: cover;
+    color: white;
+  }
+
+  /* Pantalla de inicio */
+  .pantalla-inicio {
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    top: 0; left: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 10;
+    background: url('https://i.postimg.cc/L5vQTW6B/KOS-LIVE-5.png') no-repeat center center fixed;
+    background-size: cover;
+  }
+  .pantalla-inicio.oculto {
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.5s ease;
+  }
+  .pantalla-inicio img.logo {
+    max-width: 900px;
+    width: 100%;
+    height: auto;
+  }
+  .btn-entrar {
+    margin-top: 8px;
+    padding: 14px 50px;
+    font-size: 22px;
+    background-color: transparent;
+    color: white;
+    border: 3px solid white;
+    border-radius: 25px;
+    cursor: pointer;
+    font-weight: bold;
+  }
+  .btn-entrar:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+  .redes {
+    margin-top: 20px;
+    display: flex;
+    gap: 20px;
+  }
+  .redes a {
+    width: 60px;
+    height: 60px;
+    border-radius: 15px;
+    background-image: url('https://i.postimg.cc/C5p83SJH/KOS-LIVE-9.png');
+    background-repeat: no-repeat;
+    background-size: 100px 50px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    display: block;
+  }
+  .redes a:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    transform: scale(1.1);
+  }
+  .redes a.x {
+    background-position: 5px center;
+  }
+  .redes a.youtube {
+    background-position: right 5px center;
+  }
+
+  /* Tienda */
+  .tienda {
+    display: none;
+    flex-direction: column;
+    height: 100vh;
+    padding: 20px 30px;
+    align-items: center;
+  }
+  .tienda.visible {
+    display: flex;
+  }
+  
+  header {
+    background-color: rgba(70, 130, 255, 0.9);
+    color: #fff;
+    padding: 15px 30px;
+    font-size: 28px;
+    font-weight: 700;
+    text-align: center;
+    letter-spacing: 3px;
+    border-bottom: 3px solid rgba(100, 160, 255, 1);
+    margin-bottom: 20px;
+    width: 100%;
+    max-width: 1200px;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(100, 160, 255, 0.9);
+  }
+
+  nav {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    margin-bottom: 20px;
+    width: 100%;
+    max-width: 1200px;
+    padding: 10px 0;
+    border-radius: 10px;
+    background-color: rgba(135, 206, 250, 0.75);
+    box-shadow: 0 4px 6px rgba(135, 206, 250, 0.4);
+  }
+  nav button {
+    background-color: rgba(100, 149, 237, 0.9);
+    color: white;
+    padding: 10px 20px;
+    font-weight: 700;
+    font-size: 18px;
+    border-radius: 25px;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 0 8px rgba(100, 149, 237, 0.8);
+    transition: background-color 0.3s ease, transform 0.3s ease;
+  }
+  nav button:hover {
+    background-color: rgba(65, 105, 225, 0.95);
+    transform: scale(1.05);
+  }
+  nav button.active {
+    background-color: rgba(65, 105, 225, 0.95);
+    box-shadow: 0 0 12px rgba(65, 105, 225, 1);
+  }
+
+  .categoria {
+    background-color: rgba(100, 149, 237, 0.9);
+    border-radius: 15px;
+    padding: 15px;
+    width: 100%;
+    max-width: 1200px;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    box-shadow: 0 0 15px rgba(100, 149, 237, 0.7);
+  }
+  .categoria.visible {
+    display: flex;
+  }
+  .categoria h2 {
+    margin-bottom: 15px;
+    font-size: 26px;
+    border-bottom: 2px solid rgba(65, 105, 225, 1);
+    padding-bottom: 8px;
+    width: 100%;
+    text-align: center;
+    color: white;
+  }
+  .productos-lista {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+    width: 100%;
+  }
+  .producto {
+    background-color: rgba(135, 206, 250, 0.8);
+    border-radius: 15px;
+    padding: 10px;
+    text-align: center;
+    box-shadow: 0 0 12px rgba(100, 149, 237, 0.9);
+    width: 220px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: #002366;
+  }
+  .producto img {
+    width: 100%;
+    max-height: 140px;
+    object-fit: contain;
+    border-radius: 10px;
+    margin-bottom: 10px;
+  }
+  .producto h3 {
+    font-size: 18px;
+    margin-bottom: 10px;
+    color: #001f4d;
+  }
+  .producto button {
+    background-color: rgba(65, 105, 225, 0.9);
+    border: none;
+    padding: 10px 0;
+    border-radius: 12px;
+    font-weight: 700;
+    font-size: 16px;
+    color: white;
+    cursor: pointer;
+    width: 100%;
+    transition: background-color 0.3s ease;
+  }
+  .producto button:hover {
+    background-color: rgba(45, 75, 150, 0.9);
+  }
+
+  #popup {
+    display:none;
+    position: fixed;
+    top:0; left:0; right:0; bottom:0;
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(3px);
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+  }
+  #popupMensaje {
+    background: rgba(255, 255, 255, 0.9);
+    padding: 25px 40px;
+    border-radius: 15px;
+    box-shadow: 0 0 15px rgba(0,0,0,0.25);
+    font-weight: 700;
+    font-size: 22px;
+    color: #333;
+    max-width: 350px;
+    text-align: center;
+    cursor: pointer;
+  }
+  #contador {
+    margin-top: 8px;
+    font-size: 20px;
+    color: #555;
+  }
+</style>
+</head>
+<body>
+
+<div class="pantalla-inicio" id="pantallaInicio">
+  <div class="redes">
+    <a href="https://x.com/LiveKos_" target="_blank" aria-label="Twitter (X)" class="x"></a>
+    <a href="https://www.youtube.com/@KOSLIVE-OFC" target="_blank" aria-label="YouTube" class="youtube"></a>
+  </div>
+  <img src="https://i.postimg.cc/PrrRxd26/KOS-LIVE-4.png" alt="Logo" class="logo" />
+  <button class="btn-entrar" id="btnEntrar">Entrar</button>
+</div>
+
+<div class="tienda" id="tienda">
+  <header>LIVE SHOP</header>
+  <nav id="navCategorias">
+    <button class="active" data-cat="props">Props</button>
+    <button data-cat="productos">Productos</button>
+    <button data-cat="visuales">Visuales</button>
+  </nav>
+
+  <section class="categoria visible" id="cat-props">
+    <h2>Props</h2>
+    <div class="productos-lista" id="lista-props"></div>
+  </section>
+
+  <section class="categoria" id="cat-productos">
+    <h2>Productos</h2>
+    <div class="productos-lista" id="lista-productos"></div>
+  </section>
+
+  <section class="categoria" id="cat-visuales">
+    <h2>Visuales</h2>
+    <div class="productos-lista" id="lista-visuales"></div>
+  </section>
+</div>
+
+<div id="popup">
+  <div id="popupMensaje">
+    <div id="contador"></div>
+  </div>
+</div>
+
+<script>
+  const btnEntrar = document.getElementById('btnEntrar');
+  const pantallaInicio = document.getElementById('pantallaInicio');
+  const tienda = document.getElementById('tienda');
+  const navCategorias = document.getElementById('navCategorias');
+  const categorias = {
+    props: document.getElementById('cat-props'),
+    productos: document.getElementById('cat-productos'),
+    visuales: document.getElementById('cat-visuales')
+  };
+
+  const productosData = {
+    props: [
+      {
+        id: 2,
+        nombre: "Pistola de Dinero",
+        imagen: "https://i.postimg.cc/c47DcMSC/logo-7.png",
+        link: "https://mega.nz/file/ysBlUapQ#jIQn9BaIfun_jfLzChOvyvbD-kQ9n_lRNfrc01qAdmw"
+      }
+    ],
+    productos: [
+      {
+        id: 3,
+        nombre: "Conejo Pink Aura",
+        imagen: "https://i.postimg.cc/Xv11Cj0g/logo-4.png",
+        link: "https://mega.nz/file/foIgiDLD#mIfNwe1zQBMwt2X8zq6PFPpDEiKibykSP9yydj_pX1U"
+      },
+      {
+        id: 4,
+        nombre: "Plataforma Pink Aura",
+        imagen: "https://i.postimg.cc/65xjRbFF/logo-5.png",
+        link: "https://mega.nz/file/utBwCSAQ#xu5x0pRtrOMeuFkgOq2vbENTOk2s_tsBU5XYLI3N0v0"
+      }
+    ],
+    visuales: [
+      {
+        id: 5,
+        nombre: "Big Bang - Visual",
+        imagen: "https://img.youtube.com/vi/6Gx7yRkR2hg/hqdefault.jpg",
+        link: "https://www.youtube.com/watch?v=6Gx7yRkR2hg"
+      },
+      {
+        id: 6,
+        nombre: "Mentiroso - Visual",
+        imagen: "https://img.youtube.com/vi/mZ1ThjL40pQ/hqdefault.jpg",
+        link: "https://www.youtube.com/watch?v=mZ1ThjL40pQ"
+      }
+    ]
+  };
+
+  function cargarProductos() {
+    for (const cat in productosData) {
+      const lista = document.getElementById('lista-' + cat);
+      lista.innerHTML = '';
+      productosData[cat].forEach(prod => {
+        const div = document.createElement('div');
+        div.className = 'producto';
+        if (cat === 'visuales') {
+          div.innerHTML = `
+            <img src="${prod.imagen}" alt="${prod.nombre}" />
+            <h3>${prod.nombre}</h3>
+            <button onclick="window.open('${prod.link}', '_blank')">Ver video</button>
+          `;
+        } else {
+          div.innerHTML = `
+            <img src="${prod.imagen}" alt="${prod.nombre}" />
+            <h3>${prod.nombre}</h3>
+            <button class="btn-proximamente">Próximamente</button>
+          `;
+        }
+        lista.appendChild(div);
+      });
+    }
+
+    document.querySelectorAll('.btn-proximamente').forEach(btn => {
+      btn.addEventListener('click', () => {
+        mostrarPopup();
+      });
+    });
+  }
+
+  function mostrarPopup() {
+    const popup = document.getElementById('popup');
+    const contador = document.getElementById('contador');
+    popup.style.display = 'flex';
+
+    // Fecha límite
+    const fechaLimite = new Date('2025-08-15T18:00:00');
+
+    function actualizarContador() {
+      const ahora = new Date();
+      const diff = fechaLimite - ahora;
+
+      if (diff <= 0) {
+        contador.textContent = '¡Descargas disponibles!';
+        clearInterval(intervalo);
+        document.querySelectorAll('.btn-proximamente').forEach((btn, i) => {
+          const cat = btn.closest('.productos-lista').id.replace('lista-', '');
+          const prod = productosData[cat][i];
+          btn.textContent = 'Descargar';
+          btn.style.backgroundColor = 'rgba(65, 105, 225, 0.9)';
+          btn.onclick = () => window.open(prod.link, '_blank');
+        });
+        return;
+      }
+
+      const dias = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const horas = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutos = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+      const segundos = Math.floor((diff % (1000 * 60)) / 1000);
+
+      contador.textContent = `Faltan: ${dias}d ${horas}h ${minutos}m ${segundos}s`;
+    }
+
+    actualizarContador();
+    const intervalo = setInterval(actualizarContador, 1000);
+
+    popup.onclick = () => {
+      popup.style.display = 'none';
+      clearInterval(intervalo);
+    };
+  }
+
+  navCategorias.addEventListener('click', (e) => {
+    if (e.target.tagName === 'BUTTON') {
+      navCategorias.querySelectorAll('button').forEach(btn => btn.classList.remove('active'));
+      e.target.classList.add('active');
+
+      const cat = e.target.dataset.cat;
+      for (const key in categorias) {
+        if (key === cat) {
+          categorias[key].classList.add('visible');
+        } else {
+          categorias[key].classList.remove('visible');
+        }
+      }
+    }
+  });
+
+  btnEntrar.addEventListener('click', () => {
+    pantallaInicio.classList.add('oculto');
+    setTimeout(() => {
+      pantallaInicio.style.display = 'none';
+      tienda.classList.add('visible');
+      cargarProductos();
+    }, 500);
+  });
+</script>
+
+</body>
+</html>
