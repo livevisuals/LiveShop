@@ -15,9 +15,9 @@
     background-size: cover; }
   .pantalla-inicio.oculto { opacity: 0; pointer-events: none; transition: opacity 0.5s ease; }
   .pantalla-inicio img.logo { max-width: 900px; width: 100%; height: auto; }
-  .btn-entrar { margin-top: 8px; padding: 14px 50px; font-size: 22px; background-color: transparent;
+  .btn-entrar, .btn-aviso { margin-top: 8px; padding: 14px 50px; font-size: 22px; background-color: transparent;
     color: white; border: 3px solid white; border-radius: 25px; cursor: pointer; font-weight: bold; }
-  .btn-entrar:hover { background-color: rgba(255, 255, 255, 0.1); }
+  .btn-entrar:hover, .btn-aviso:hover { background-color: rgba(255, 255, 255, 0.1); }
   .redes { margin-top: 20px; display: flex; gap: 20px; }
   .redes a { width: 60px; height: 60px; border-radius: 15px;
     background-image: url('https://i.postimg.cc/C5p83SJH/KOS-LIVE-9.png');
@@ -54,6 +54,38 @@
   .producto button { background-color: rgba(65, 105, 225, 0.9); border: none; padding: 10px 0; border-radius: 12px;
     font-weight: 700; font-size: 16px; color: white; cursor: pointer; width: 100%; transition: background-color 0.3s ease; }
   .producto button:hover { background-color: rgba(45, 75, 150, 0.9); }
+
+  /* AVISO */
+  #popupAviso {
+    display: none;
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.5);
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+  }
+  #popupAvisoContenido {
+    background: rgba(255,255,255,0.9);
+    border-radius: 25px;
+    padding: 25px 30px;
+    color: #333;
+    max-width: 500px;
+    text-align: center;
+    font-size: 18px;
+    line-height: 1.4;
+    box-shadow: 0 0 15px rgba(0,0,0,0.25);
+  }
+
+  /* contador visitas */
+  footer {
+    margin-top: auto;
+    padding: 10px;
+    text-align: center;
+    font-size: 16px;
+    color: white;
+    opacity: 0.9;
+  }
 </style>
 </head>
 <body>
@@ -65,6 +97,7 @@
   </div>
   <img src="https://i.postimg.cc/PrrRxd26/KOS-LIVE-4.png" alt="Logo" class="logo" />
   <button class="btn-entrar" id="btnEntrar">Entrar</button>
+  <button class="btn-aviso" id="btnAviso">Aviso</button>
 </div>
 
 <div class="tienda" id="tienda">
@@ -86,10 +119,24 @@
     <h2>Visuales</h2>
     <div class="productos-lista" id="lista-visuales"></div>
   </section>
+  <footer>
+    <span id="contadorVisitas"></span>
+  </footer>
+</div>
+
+<!-- POPUP AVISO -->
+<div id="popupAviso">
+  <div id="popupAvisoContenido">
+    Como ya varios se habrán dado cuenta, el canal no está disponible por ahora.  
+    Ya mandé una apelación para ver qué pasó, pero todavía no tengo respuesta.  
+    No sé bien la causa, pero voy a intentar recuperarlo.  
+    Aunque no se pueda entrar, todavía aparece en mis accesos, así que hay chance de que vuelva.
+  </div>
 </div>
 
 <script>
   const btnEntrar = document.getElementById('btnEntrar');
+  const btnAviso = document.getElementById('btnAviso');
   const pantallaInicio = document.getElementById('pantallaInicio');
   const tienda = document.getElementById('tienda');
   const navCategorias = document.getElementById('navCategorias');
@@ -180,8 +227,29 @@
       pantallaInicio.style.display = 'none';
       tienda.classList.add('visible');
       cargarProductos();
+      actualizarVisitas();
     }, 500);
   });
+
+  // --- Aviso ---
+  const popupAviso = document.getElementById('popupAviso');
+  btnAviso.addEventListener('click', () => {
+    popupAviso.style.display = 'flex';
+  });
+  popupAviso.addEventListener('click', (e) => {
+    if (e.target === popupAviso) popupAviso.style.display = 'none';
+  });
+
+  // --- Visitas ---
+  function actualizarVisitas() {
+    let visitas = localStorage.getItem('visitasTienda');
+    if (!visitas) {
+      visitas = 0;
+    }
+    visitas = parseInt(visitas) + 1;
+    localStorage.setItem('visitasTienda', visitas);
+    document.getElementById('contadorVisitas').textContent = "Visitas: " + visitas;
+  }
 </script>
 
 </body>
